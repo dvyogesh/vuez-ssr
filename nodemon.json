@@ -1,0 +1,5 @@
+{
+  "quiet": true,
+  "exec": "node server.js",
+  "watch": "dist/server.bundle.js"
+}

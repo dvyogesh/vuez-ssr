@@ -1,0 +1,57 @@
+img {
+  max-width: 150px;
+}
+.order-input-container {
+  background-color: #fff;
+  border-radius: 5px;
+  padding: 5%;
+  max-width: 85%;
+  margin: 3% auto auto auto;
+  border:thin solid #ddd;
+
+  .order-upload-btn {
+    background: #93b500;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 500;
+    padding: 10px 15px;
+    margin-top: 25px;
+  }
+
+  .call-details {
+    font-size: 17px;
+    margin-top: 29px;
+    text-align: center;
+  }
+
+  .bottom-border {
+    width: 100%;
+    margin: 0 0 21px;
+    border-top: 1px solid #d1d1d1;
+  }
+
+  #download-text {
+    font-size: 15px;
+    margin-bottom: 20px;
+  }
+  .order-inputs {
+      margin: 10px;
+      .form-control {
+        max-width: 80%;
+        margin:0 auto;
+      }
+  }
+  #file-btn-style {
+    background-color: #ff2d2d;
+    color: #fff;
+    padding: 10px 20px;
+    text-transform: uppercase;
+    .file-btn {
+      display: none;
+    }
+  }
+  
+
+  .app-download-btn {
+  }
+}
