@@ -1,0 +1,8 @@
+node_modules
+functions
+dist
+!node_modules.patch
+
+/functions/
+/node_modules/
+/dist/
