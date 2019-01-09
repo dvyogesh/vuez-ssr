@@ -1,0 +1,12 @@
+.margin-0{
+	margin: 0px;
+}
+.curosel-left {
+  padding-left: 6%;
+  padding-top: 15px;
+  @media only screen and (max-width: 767px) {
+    &{
+      padding-left: 0%;
+    }
+  }
+}

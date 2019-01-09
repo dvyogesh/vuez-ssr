@@ -6,7 +6,7 @@
     <div class="nav-bar-main row">
       <div class="nav-left col-sm-3 col-xs-12 text-center">
         <div class="nav-logo">
-          <img src="https://www.medlife.com/images/medlife_logo.svg" >
+          <img src="https://www.medlife.com/images/medlife_logo3.svg" >
         </div>
       </div>
       <div class="nav-right col-sm-9 col-xs-12 text-center">
@@ -225,4 +225,5 @@ img {
   padding-top: 20%;
   opacity: 0.5;
 }
+:host { display: block; }   
 </style>

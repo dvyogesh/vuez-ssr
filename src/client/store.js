@@ -87,6 +87,7 @@ import AppModule from './components/App/AppStore'
 import AuthModule from './components/Auth/AuthStore'
 import MyOrdersModule from './components/MyOrders/MyOrdersStore'
 import OmsModule from './components/Oms/OmsStore'
+import HomeModule from './components/Home/HomeStore'
 // import PersonModule from './person_module'
 // import MessageModule from './message_module'
 
@@ -103,10 +104,11 @@ const modules = {
 	Api: AppModule,
 	App: AppModule,
 	Cms: CmsModule,
-	
+	Home: HomeModule,
 	User: AuthModule,
 	orders: MyOrdersModule,
 	oms: OmsModule,
+
 	
 
 }

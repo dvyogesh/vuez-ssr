@@ -23,8 +23,8 @@ function checkTokenSetUser(req, res, next) {
 	if (authHeader && isEmpty(newUser) ) {
 		console.log('enterd')
 		const token = authHeader.split(' ')[1];
-		console.log(authHeader)
-		console.log(token)
+		// console.log(authHeader)
+		// console.log(token)
 		if (token && token !== null) {
 			jwt.verify(token, HConfig.TOKEN_SECRET, (error, user) => {
 				if (error) {

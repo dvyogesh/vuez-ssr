@@ -43,24 +43,30 @@
           </div>
           <div class="col-sm-9">
             <ul class="list-unstyled">
-              <li v-if="tabs[0].isActive">
+              <li v-show="tabs[0].isActive">
                 <div>
                   <h1>{{ tabs[0].name }}</h1>
                   <CmsHome/>
                 </div>
      
               </li>
-              <li v-if="tabs[1].isActive">
+              <li v-show="tabs[1].isActive">
                 <div>
                   <h1>{{ tabs[1].name }}</h1>
                 </div>
           	  
               </li>
-              <li v-if="tabs[2].isActive">
+              <li v-show="tabs[2].isActive">
                 <div>
                   <h1>{{ tabs[2].name }}</h1>
                 </div>
           	  
+              </li>
+              <li v-show="tabs[3].isActive">
+                <div>
+                  <h1>{{ tabs[3].name }}</h1>
+                </div>
+              
               </li>
           	  
             </ul>
@@ -101,6 +107,10 @@ export default {
 				},
 				{
 					name:'SiteTicker',
+					isActive: false
+				},
+				{
+					name:'Create Page',
 					isActive: false
 				},
 
@@ -165,11 +175,18 @@ export default {
 	padding: 0px;
 }
 .fixed-list {
-	position: fixed;
+	position: sticky;
+	position: -webkit-sticky;
 	width: 100%;
 	max-width: 250px;
 	height: 100%;
 	background-color: #eee;
+	position: -webkit-sticky;
+	  position: sticky;
+	  top: 0;
+	  background-color: yellow;
+	  padding: 50px;
+	  font-size: 20px;
 	ul {
 		padding: 0px;
 		li {

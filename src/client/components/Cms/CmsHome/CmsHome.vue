@@ -1,27 +1,155 @@
 <template>
-  <div>
-    <div class="form-group">
-      <label for="usr">Name:</label>
-      <input 
-        id="usr" 
-        type="text" 
-        class="form-control">
+  <div class="cms-home text-left">
+    <div class="banner-section">
+
+      <h2 class="headding">Banner</h2>
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="usr">Banner Image Url:</label>
+            <input  
+              v-model="banner.bannerUrl"
+              type="text" 
+              class="form-control">
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="usr">On click Link:</label>
+            <input 
+              v-model="banner.actionLink"
+              type="text" 
+              class="form-control">
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="usr">Alt text:</label>
+            <input 
+              v-model="banner.altText"
+              type="text" 
+              class="form-control">
+          </div>
+        </div>
+      </div>
+      <div 
+        v-if="banner.id" 
+        class="bannerDisplay">
+        <a :href="banner.actionLink">
+          <img 
+            :src="banner.bannerUrl" 
+            :alt="banner.altText">
+        </a>
+      </div>
+      <div class="upload-btn">
+
+        <button 
+          v-if="!banner.id"
+          class="btn btn-primary"
+          @click="uploadBanner">Submit</button>
+        <button 
+          v-if="banner.id"
+          class="btn btn-primary"
+          @click="updateBanner">Submit</button>
+      </div>
+  		
     </div>
+    <div class="slider-section">
+      <h2 class="headding">Slides</h2>
+      
+      <div class="row">
+        <div class="col-sm-3">
+          <div class="form-group">
+            <input 
+              v-model="slideImgurl"
+              type="text" 
+              class="form-control"
+              placeholder="Enter image Url">
+          </div>
+        </div>
+        <div class="col-sm-3">
+          <div class="form-group">
+            <input 
+              v-model="slideActionlink" 
+              type="text" 
+              class="form-control"
+              placeholder="Enter image on click Url">
+          </div>
+        </div>
+        <div class="col-sm-3">
+          <div class="form-group">
+            <input 
+              v-model="textOnSlide" 
+              type="text" 
+              class="form-control"
+              placeholder="Enter image on text">
+          </div>
+        </div>
+        <div class="col-sm-3">
+          <button 
+            class="btn btn-primary"
+            @click="addSlide">+ Add</button>
+        </div>
+      </div>
+      
+      <div class="list-slide">
+        <ul class="list-inline">
+          <li 
+            v-for="(slide, index) in slides" 
+            :key="index">
+            <img :src="slide.imgUrl">
+            <p><b>Link Url :</b></p>
+            <p>{{ slide.actionLink }}</p>
+            <p><b>Text On slide :</b></p>
+            <p>{{ slide.textOnSlide }}</p>
+            <button 
+              class="btn btn-primary" 
+              @click="removeSlide(index)">Remove</button>
+          </li>
+        </ul>
+        <div class="upload-btn">
+
+          <button 
+            v-if="slides.length > 0"
+            class="btn btn-primary"
+            @click="uploadSliders">Submit</button>
+        </div>
+        
+      </div>
+
+    </div>
+    
     
   </div>
 </template>
 <script>
 
 //import store from '../../store';
+import axios from 'axios'
 import {mapState, mapActions, mapGetters} from 'vuex';
 	
 export default {
 	props: ['type'],
+	data(){
+		return {
+			banner: {
+				bannerUrl: '',
+				altText: '',
+				actionLink: '',
+				id: ''
+			},
+			slideImgurl:'',
+			slideActionlink: '',
+			textOnSlide:'',
+			slides: []
+		}
+	},
 	computed: {
 		...mapState('Cms',
 			{teamA: 'teamA', teamB: 'teamB'},
 
 		),
+		
 		// team(){
 		// 	console.log(this)
 		// 	//we will call props with this key word
@@ -29,12 +157,94 @@ export default {
 
 		// }
 	},
+	mounted() {
+		axios.get('/api/cms/home').then(
+			response => {
+				//console.log(response.data)
+				this.toggleLoading(false)
+				console.log('cms response')
+				this.banner = response.data[0].banners.homePage
+				this.banner.id = response.data[0]._id
+				this.slides = response.data[0].slides
+				console.log(response.data[0].banners)
+				//this.cms = this.getCmsData(response.data);
+			},
+			error => {
+				this.loading = false
+			}
+		)
+	},
 	methods: {
 		//removeTeamMember({type: type, id: id, index: index}){
 		// by default mapActions will take one param so we need to pass one obj
+		...mapActions('App',{
+			'toggleLoading': 'toggleLoading'
+		}),
 		...mapActions('Cms',{removeMember:'removeTeamMember'}),
 		removeTeamMember: function(data){
 			this.removeMember(data)
+		},
+		addSlide(){
+			if (this.slideImgurl) {
+				this.slides.push({
+		         slideImgurl: this.slideImgurl,
+		         actionLink: this.slideActionlink,
+		         textOnSlide: this.textOnSlide
+		       });
+				this.slideImgurl=''
+				this.slideActionlink=''
+			}
+		},
+		removeSlide(index) {
+			 this.slides.splice(index, 1);
+		},
+
+		uploadBanner() {
+			this.toggleLoading(true)
+			const data = {
+				bannerUrl: this.banner.bannerUrl,
+				altText: this.banner.altText,
+				actionLink: this.banner.actionLink
+			}
+			axios
+				.post('/api/cms/home/banner', data)
+				.then(response => {
+					console.log(response)
+					this.toggleLoading(false)
+				})
+				.catch(error => {
+					console.log(error)
+				})
+		},
+		updateBanner() {
+			this.toggleLoading(true)
+			const data = {
+				bannerUrl: this.banner.bannerUrl,
+				altText: this.banner.altText,
+				actionLink: this.banner.actionLink,
+				id: this.banner.id
+			}
+			axios
+				.put('/api/cms/home/banner', data)
+				.then(response => {
+					console.log(response)
+					this.toggleLoading(false)
+				})
+				.catch(error => {
+					console.log(error)
+				})
+		},
+		uploadSliders() {
+			const data = this.slides
+			axios
+				.post('/api/cms/home/slider', data)
+				.then(response => {
+					console.log(response)
+					this.toggleLoading(false)
+				})
+				.catch(error => {
+					console.log(error)
+				})
 		}
 		//this.$store.dispatch("removeTeamMember", {type, id, index})
 
@@ -42,3 +252,23 @@ export default {
 	}
 }
 </script>
+
+
+<style lang="scss" scoped>
+	.cms-home {
+		 h2.headding {
+				padding-bottom: 15px;
+			    border-bottom: thin solid #ccc;
+			}
+		.list-slide ul{
+			li{
+				padding: 20px 0px;
+				border-bottom: thin solid #ccc;
+				img {
+					width: 100%;
+				}
+			}
+		}
+	}
+    
+</style>

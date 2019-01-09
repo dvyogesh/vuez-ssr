@@ -98,7 +98,7 @@
 
 <script>
 import axios from 'axios'
-import { createApp } from '../../../main.js'
+//import { createApp } from '../../../main.js'
 import {mapGetters,mapActions, mapState } from 'vuex';
 import isEmpty from "lodash/isEmpty";
 

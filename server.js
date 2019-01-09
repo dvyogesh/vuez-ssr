@@ -11,6 +11,7 @@ require('./src/loadConfig');
 const DB = require('./src/server/Models/OrdersModel');
 const DB2 = require('./src/server/Models/NotesModel');
 const DB3 = require('./src/server/Models/UserModel');
+const DB4 = require('./src/server/Models/CmsModel');
 
 
 import './src/loadConfig';
@@ -32,7 +33,7 @@ const storeReq = require('./src/client/App')
 
 //mongoose instance connection url connection
 mongoose.Promise = global.Promise;
-
+1
 //connect directly to mongoose
 
 mongoose.connect('mongodb://localhost/homeolaya').then(
@@ -97,6 +98,7 @@ routes(app)
 //start server
 app.get("*", (req, res, next) => {
 
+  
   bundle.default({ url: req.url }).then(
     app => {
       //context to use as data source
