@@ -12,7 +12,9 @@ const DB = require('./src/server/Models/OrdersModel');
 const DB2 = require('./src/server/Models/NotesModel');
 const DB3 = require('./src/server/Models/UserModel');
 const DB4 = require('./src/server/Models/CmsModel');
+const DB5 = require('./src/server/Models/OffersModel');
 
+//import {cms, OfferSchema } from './src/server/Models/CmsModel';
 
 import './src/loadConfig';
 const auth = require('./src/server/Controllers/Auth');

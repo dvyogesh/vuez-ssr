@@ -51,7 +51,9 @@ const AppModule = {
 	// 	// },
 	state: { //data
 		reqBody:{},
-		isLoading: false
+		isLoading: false,
+		isToastOpen: false,
+		toastData: 'No data'
 	},
 	
 	actions:{
@@ -75,6 +77,9 @@ const AppModule = {
 		},
 		toggleLoading(context, data){
 			context.commit('toggleLoading', data)
+		},
+		toggleToast(context, data=''){
+			context.commit('toggleToast', data)
 		}
 	},
 	mutations: { // used for changing state
@@ -109,7 +114,11 @@ const AppModule = {
 		},
 		setReqBody(state, data){
 			state.reqBody = data
-		}
+		},
+		toggleToast(state, data=''){
+			state.isToastOpen = !state.isToastOpen
+			state.toastData = data
+		},
 	}
 	
 }

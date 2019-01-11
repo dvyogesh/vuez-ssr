@@ -27,6 +27,8 @@ const slidesSchema = Schema({
 //     banner: [{ type: Schema.Types.ObjectId, ref: 'Banner' }],
 //     slides: [{ type: Schema.Types.ObjectId, ref: 'Slides' }]
 // });
+const Banners  = mongoose.model('Banners', bannerSchema);
+const Slides = mongoose.model('Slides', slidesSchema);
 
 const CmsSchema = new Schema({
 	
@@ -42,16 +44,11 @@ const CmsSchema = new Schema({
 	mainBanner: {
 		type: Object,
 	},
-	banners: {
-		type: Object,
-		ref: 'Banners' 
-	},
-	slides: {type: [{type:mongoose.Schema.Types.Mixed, ref: 'Slides'}]
-	}
-
+	banners: {type:mongoose.Schema.Types.Mixed, ref: 'Banners'},
+	slides: {type:mongoose.Schema.Types.Mixed, ref: 'Slides'}
+	
 });
 
-const Banners  = mongoose.model('Banners', bannerSchema);
-const Slides = mongoose.model('Slides', slidesSchema);
 
 module.exports = mongoose.model('Cms', CmsSchema);
+//export default {cms, OfferSchema

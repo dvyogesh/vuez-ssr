@@ -1,6 +1,8 @@
 <template>
   <div class="cms-home text-left">
-    <div class="banner-section">
+    <div 
+      v-if="banner" 
+      class="banner-section">
 
       <h2 class="headding">Banner</h2>
       <div class="row">
@@ -93,20 +95,9 @@
       </div>
       
       <div class="list-slide">
-        <ul class="list-inline">
-          <li 
-            v-for="(slide, index) in slides" 
-            :key="index">
-            <img :src="slide.imgUrl">
-            <p><b>Link Url :</b></p>
-            <p>{{ slide.actionLink }}</p>
-            <p><b>Text On slide :</b></p>
-            <p>{{ slide.textOnSlide }}</p>
-            <button 
-              class="btn btn-primary" 
-              @click="removeSlide(index)">Remove</button>
-          </li>
-        </ul>
+        <div v-if="slides.length > 0">
+          <SlideShow :slides="slides"/>
+        </div>
         <div class="upload-btn">
 
           <button 
@@ -127,8 +118,10 @@
 //import store from '../../store';
 import axios from 'axios'
 import {mapState, mapActions, mapGetters} from 'vuex';
+import SlideShow from '../../Common/SlideShow/SlideShow';
 	
 export default {
+	components: {SlideShow},
 	props: ['type'],
 	data(){
 		return {
@@ -163,10 +156,18 @@ export default {
 				//console.log(response.data)
 				this.toggleLoading(false)
 				console.log('cms response')
-				this.banner = response.data[0].banners.homePage
-				this.banner.id = response.data[0]._id
-				this.slides = response.data[0].slides
-				console.log(response.data[0].banners)
+				if (response.data[0] && response.data[0].banners) {
+					this.banner = response.data[0].banners.homePage
+					this.banner.id = response.data[0]._id
+				}
+				if (response.data[0] && response.data[0].slides) {
+					console.log(response.data[0].slides.homePage)
+					this.slides = response.data[0].slides.homePage
+				}
+				
+				
+				
+				//console.log(response.data[0].banners)
 				//this.cms = this.getCmsData(response.data);
 			},
 			error => {
@@ -178,7 +179,8 @@ export default {
 		//removeTeamMember({type: type, id: id, index: index}){
 		// by default mapActions will take one param so we need to pass one obj
 		...mapActions('App',{
-			'toggleLoading': 'toggleLoading'
+			'toggleLoading': 'toggleLoading',
+			'toggleToast': 'toggleToast'
 		}),
 		...mapActions('Cms',{removeMember:'removeTeamMember'}),
 		removeTeamMember: function(data){
@@ -211,6 +213,7 @@ export default {
 				.then(response => {
 					console.log(response)
 					this.toggleLoading(false)
+					this.toggleToast('Uploaded Banner')
 				})
 				.catch(error => {
 					console.log(error)
@@ -229,6 +232,7 @@ export default {
 				.then(response => {
 					console.log(response)
 					this.toggleLoading(false)
+					this.toggleToast('Updated Banner')
 				})
 				.catch(error => {
 					console.log(error)
@@ -241,6 +245,7 @@ export default {
 				.then(response => {
 					console.log(response)
 					this.toggleLoading(false)
+					this.toggleToast('Uploaded Slider')
 				})
 				.catch(error => {
 					console.log(error)
@@ -268,6 +273,9 @@ export default {
 					width: 100%;
 				}
 			}
+		}
+		.bannerDisplay {
+			padding: 10px;
 		}
 	}
     

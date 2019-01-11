@@ -5,9 +5,15 @@ img {vertical-align: middle;}
   max-width: 1000px;
   position: relative;
   margin: auto;
+  ul{
+    li{
+      a{ display: block;}
+    }
+  }
   .mySlides{
     img {
-      width: 100%
+      width: 100%;
+      border: thin solid #ccc;
     }
   }
   /* Fading animation */

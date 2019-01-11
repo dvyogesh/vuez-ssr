@@ -50,6 +50,12 @@
       class="loader">
       <h2>Loading.....</h2>
     </div>
+    <div 
+      v-if="isToastOpen" 
+      class="toast">
+      <p>X</p>
+      <Toast/>
+    </div>
   </div>
   
 </template>
@@ -57,9 +63,13 @@
 <script>
 import axios from 'axios'
 import {mapGetters,mapActions, mapState } from 'vuex';
+import Toast from './components/Common/Toast/Toast'
 
 
 export default {
+	components: {
+		Toast
+	},
 	data () {
 		return {
 			siteTikker: '10% off on pre-paid orders',
@@ -72,7 +82,8 @@ export default {
 			userData: 'userData'
 		}),
 		...mapState('App',{
-			isLoading: 'isLoading'
+			isLoading: 'isLoading',
+			isToastOpen: 'isToastOpen',
 		}),
 	},
 
@@ -104,7 +115,8 @@ export default {
 			'setUser': 'setUser'
 		}),
 		...mapActions('App',{
-			'toggleLoading': 'toggleLoading'
+			'toggleLoading': 'toggleLoading',
+			'toggleToast': 'toggleToast'
 		}),
 		checkAuth() {
 			const tocken = localStorage.getItem('jwtUser')
@@ -138,6 +150,9 @@ export default {
 </script>
 
 <style lang="scss">
+html {
+  scroll-behavior: smooth;
+}
 
 * {
   margin: 0px;
@@ -146,6 +161,7 @@ export default {
 p {
   margin: 0px;
 }
+.color-red{color:red;}
 .text-center {
   text-align: center;
 }

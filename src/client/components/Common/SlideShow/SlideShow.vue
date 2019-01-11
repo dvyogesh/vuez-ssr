@@ -3,16 +3,25 @@
   <div>
 
     <div class="slideshow-container">
-      
-      <div class="mySlides fadein">
-        <div class="numbertext">1 / 3</div>
-        <img 
-          src="//w3schools.com/howto/img_nature_wide.jpg" 
+      <ul class="list-unstyled">
+        <li 
+          v-for="(slide, index) in slides"
+          :key="'slide'+ index"
         >
-        <div class="text">Caption Text</div>
-      </div>
+          <router-link to="#">
+            <div class="mySlides fadein">
+              <div class="numbertext">{{ index+1 }} / 3</div>
+              <img 
+                :src="slide.slideImgurl" 
+              >
+              <div class="text">{{ slide.textOnSlide }}</div>
+            </div>
+          </router-link>
+        </li>
+      </ul>
+      
 
-      <div class="mySlides fadein">
+      <!-- <div class="mySlides fadein">
         <div class="numbertext">2 / 3</div>
         <img 
           src="//w3schools.com/howto/img_snow_wide.jpg" 
@@ -26,7 +35,7 @@
           src="//w3schools.com/howto/img_mountains_wide.jpg" 
         >
         <div class="text">Caption Three</div>
-      </div>
+      </div> -->
 
       <a 
         class="prev" 
@@ -38,16 +47,13 @@
     </div>
     <br>
 
-    <div class="text-center">
+    <div class="text-center slide-indicator">
       <span 
+        v-for="(slide, index) in slides"
+        :key="'slide-indicator'+ index"
         class="dot" 
-        @click="currentSlide(1)"/> 
-      <span 
-        class="dot" 
-        @click="currentSlide(2)"/> 
-      <span 
-        class="dot" 
-        @click="currentSlide(3)"/> 
+        @click="currentSlide(index+1)"/> 
+      
     </div>
 
   </div>
@@ -55,6 +61,7 @@
 
 <script>
 export default {
+	props: ['slides'],
 	data () {
 		return {
 			aboutText: 'About Component sd',
@@ -68,7 +75,12 @@ export default {
 	// },
 	mounted () {
 		//const slideIndex = 1;
-		this.showSlides(this.slideIndex);
+		console.log('slides')
+		console.log(this.slides)
+		if (this.slides.length > 0) {
+			this.showSlides(this.slideIndex);
+		}
+		
 		// console.log('this.$route.push("/")')
 		// console.log(this.$route)
 		//this.$router.push({ path: '/myorders' })
@@ -97,8 +109,11 @@ export default {
 			for (i = 0; i < dots.length; i++) {
 				dots[i].className = dots[i].className.replace(" active", "");
 			}
-			slides[this.slideIndex-1].style.display = "block";  
-			dots[this.slideIndex-1].className += " active";
+			if (slides[this.slideIndex-1] && dots[this.slideIndex-1]) {
+				slides[this.slideIndex-1].style.display = "block";  
+				dots[this.slideIndex-1].className += " active";
+			}
+			
 		}
 	}
 }

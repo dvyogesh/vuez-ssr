@@ -26,8 +26,11 @@
     <div class="cms-maim">
       <div class="cms-inner">
         <div class="row">
-          <div class="col-sm-3 left-bar-main">
+          <div class="col-sm-2 left-bar-main">
             <div class="fixed-list">
+              <div class="user-section">
+                <h3><span class="glyphicon glyphicon-user user-icon"/> Hi Cms User</h3>
+              </div>
               <ul class="list-unstyled text-left">
                 <li 
                   v-for="(tab, index) in tabs" 
@@ -53,6 +56,7 @@
               <li v-show="tabs[1].isActive">
                 <div>
                   <h1>{{ tabs[1].name }}</h1>
+                  
                 </div>
           	  
               </li>
@@ -64,7 +68,8 @@
               </li>
               <li v-show="tabs[3].isActive">
                 <div>
-                  <h1>{{ tabs[3].name }}</h1>
+                  <!--  <h1>{{ tabs[3].name }}</h1> -->
+                  <Offers />
                 </div>
               
               </li>
@@ -84,6 +89,7 @@
 //import data from './Students.js'
 import Team from './Team';
 import CmsHome from './CmsHome/CmsHome';
+import Offers from './PageCreation/Offers/Offers'
 
 //import store from '../../store';
 import {mapGetters,mapActions, mapState } from 'vuex';
@@ -93,7 +99,11 @@ export default {
 	// 	this.students = data.getStudents()
 	// 	//console.log(getStudents)
 	// },
-	components: {Team, CmsHome},
+	components: {
+		Team,
+		CmsHome,
+		Offers
+	},
 	data() {
 		return {
 			tabs: [
@@ -171,27 +181,33 @@ export default {
 <style lang="scss" scoped>
 .container{width: 100%}
 .left-bar-main {
-	height: 100vh;
 	padding: 0px;
 }
 .fixed-list {
-	position: sticky;
-	position: -webkit-sticky;
-	width: 100%;
-	max-width: 250px;
-	height: 100%;
-	background-color: #eee;
-	position: -webkit-sticky;
-	  position: sticky;
-	  top: 0;
-	  background-color: yellow;
-	  padding: 50px;
-	  font-size: 20px;
+		color: #fff;
+		position: fixed;
+		width: 100%;
+		max-width: 235px;
+		height: 100%;
+		background-color: #000;
+		top: 0;
+		padding: 20px 0px;
+		font-size: 20px;
+		.user-section {
+			padding-bottom: 20px;
+			border-bottom: double;
+			border-color: #fff;
+		}
+		.user-icon {
+			border: thin solid #fff;
+			border-radius: 100%;
+			padding: 20px;
+		}
 	ul {
 		padding: 0px;
 		li {
 			padding: 10px;
-			border-bottom: thin solid #42424270;
+			border-bottom: thin solid #fff;
 			cursor: pointer;
 		}
 	}

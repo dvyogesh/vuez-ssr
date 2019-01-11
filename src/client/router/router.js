@@ -7,6 +7,8 @@ import Login from '../components/Auth/Login.vue'
 import Signup from '../components/Auth/Signup.vue'
 import Notes from '../components/Notes/Notes.vue'
 import Cms from '../components/Cms/Cms.vue'
+import Offers from '../components/Offers/Offers.vue'
+import OfferDetails from '../components/Offers/OfferDetails.vue'
 
 export const routes = [
 	{ path: '/', component: Home },
@@ -17,6 +19,8 @@ export const routes = [
 	{ path: '/notes', component: Notes },
 	{ path: '/oms', component: Oms },
 	{ path: '/cms', component: Cms },
+	{ path: '/offers', component: Offers },
+	{ path: '/offers/offer/:id', component: OfferDetails },
 	{ path: '/*', component: FallBackPage }
 ]
 
