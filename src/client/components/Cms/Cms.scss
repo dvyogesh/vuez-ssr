@@ -1,0 +1,58 @@
+.container{width: 100%}
+.left-bar-main {
+	padding: 0px;
+}
+.cms-container{
+	h2.headding {
+				padding-bottom: 15px;
+			    border-bottom: thin solid #ccc;
+			}
+}
+.fixed-list {
+		color: #fff;
+		position: fixed;
+		width: 100%;
+		max-width: 17%;
+		height: 100%;
+		background-color: #4F52BA;
+		top: 0;
+		padding: 20px 0px;
+		font-size: 20px;
+		@media only screen and (max-width: 767px) {
+		  &{
+		    position: static;
+		    max-width: 100%;
+		  }
+		}
+		.user-section {
+			padding: 10px 0px;
+			border-bottom: double;
+			border-color: #fff;
+			box-shadow: -5px -1px 20px 5px;
+		}
+		.user-icon {
+			border: thin solid #fff;
+			border-radius: 100%;
+			padding: 10px;
+		}
+	ul {
+		padding: 0px;
+		li {
+			padding: 10px;
+			border-bottom: thin solid #fff;
+			cursor: pointer;
+		}
+	}
+}
+	button {
+		font-size: 13px;
+		padding: 3px;
+		border-radius: 5px;
+		border:1px solid #000;
+	}
+
+button:disabled,
+button[disabled] {
+	color:#eee;
+ border:1px solid #eee;
+}

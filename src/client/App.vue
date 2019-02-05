@@ -3,34 +3,49 @@
     <div class="site-tikker text-center">
       <p>{{ siteTikker }}</p>
     </div>
-    <div class="nav-bar-main row">
-      <div class="nav-left col-sm-3 col-xs-12 text-center">
-        <div class="nav-logo">
-          <img src="https://www.medlife.com/images/medlife_logo3.svg" >
+    <div class="nav-bar-main">
+      <div class="container">
+        <div class="row">
+          <div class="nav-left col-sm-3 col-xs-12 text-center">
+            <div class="nav-logo">
+              <router-link to="/">
+                <img src="https://www.medlife.com/images/medlife_logo3.svg" >
+              </router-link>
+            </div>
+          </div>
+          <div class="nav-right col-sm-9 col-xs-12 text-center">
+            <div class="nav-links">
+              <ul class="list-inline nav-items">
+                <li><router-link to="/about">About</router-link></li>
+                <li><router-link to="/offers">Offers</router-link></li>
+                <li><router-link to="/myorders">My Orders</router-link></li>
+                <li><router-link to="/blog">Blog</router-link></li>
+                <li class="hidden-xs "><router-link to="/cms">CMS</router-link></li>
+                <li class="hidden-xs hide"><router-link to="/oms">OMS</router-link></li>
+                <li class="my-account pointer">
+                  My Account
+                  <div class="drop-down">
+                    <ul class="list-unstyled">
+                      <li v-if="!userData.userName">
+                          
+                        <router-link to="/login">Login /</router-link>
+                        <router-link to="/signup"> Signup</router-link>
+                      </li>
+                      <li v-else>
+                        <p @click="logout()">Logout</p>
+                      </li>
+                      <li>
+                        <router-link to="/myorders">My Orders</router-link>
+                      </li>
+                    </ul>
+                  </div>
+                  
+                  
+                </li>
+              </ul>
+            </div>
+          </div>
         </div>
-      </div>
-      <div class="nav-right col-sm-9 col-xs-12 text-center">
-        <div class="nav-links">
-          <ul class="list-inline nav-items">
-            <li><router-link to="/">Home</router-link></li>
-            <li><router-link to="/about">About</router-link></li>
-            <li><router-link to="/myorders">My Orders</router-link></li>
-            <li class="hidden-xs"><router-link to="/cms">CMS</router-link></li>
-            <li class="hidden-xs"><router-link to="/oms">OMS</router-link></li>
-            <li>
-              <button 
-                v-if="userData.userName"
-                class="btn btn-primary" 
-                @click="logout()">Logout</button>
-              <template v-else>
-                <router-link to="/login">Login /</router-link>
-                <router-link to="/signup"> Signup</router-link>
-              </template>
-              
-            </li>
-          </ul>
-        </div>
-
       </div>
     </div>
     <div 
@@ -44,7 +59,50 @@
           aria-current="page">My Orders</li>
       </ol>
     </div>
-    <router-view />
+    <div class="main">
+      <router-view />
+    </div>
+    
+    <div class="main-footer">
+      <ul class="list-inline text-center">
+        <li>
+          <a 
+            href="#" 
+            class="icoFacebook" 
+            title="Facebook">
+          <i class="fa fa-facebook"/></a>
+        </li>
+        <li class="twt"><a 
+          href="#" 
+          class="icoTwitter" 
+          title="Twitter">
+          <i class="fa fa-twitter"/>
+        </a>
+        </li>
+        <li class="gplus">
+          <a 
+            href="#" 
+            class="icoGoogle" 
+            title="Google +">
+            <i class="fa fa-google-plus"/>
+          </a>
+        </li>
+        <li class="insta">
+          <a 
+            href="#" 
+            class="icoInstagram" 
+            title="Instagram"><i 
+              class="fa fa-instagram" 
+              aria-hidden="true"/>
+          </a>
+        </li>
+      </ul>
+      <div class="text-center all-rights">
+        <p>© 2019. All rights reserved.</p>
+        <p>In compliance with Drug and Cosmetic Act and Rules, we don't process requests for Schedule X and other habit forming drugs.</p>
+      </div>
+      <div/>
+    </div>
     <div 
       v-show="isLoading" 
       class="loader">
@@ -158,8 +216,17 @@ html {
   margin: 0px;
   padding: 0px;
 }
-p {
+a{
+  text-decoration: none;
+}
+.main{
+  min-height: 60vh;
+}
+p, .margin-0{
   margin: 0px;
+}
+.pointer{
+  cursor: pointer;
 }
 .color-red{color:red;}
 .text-center {
@@ -201,12 +268,15 @@ p {
   .nav-item {
     text-align: center;
   }
-  .nav-links ul li {
+  .nav-links ul.nav-items > li {
     display: inline-block;
-    background-color: #eee;
     padding: 1% 0% 1% 0%;
-    width: 15%;
-    text-align: center;
+    width: 11%;
+    font-size: 16px;
+    font-weight: 500;
+    a{
+      color: #424242;
+    }
     @media only screen and (max-width: 600px) {
       & {
         font-size: 10px;
@@ -241,5 +311,105 @@ img {
   padding-top: 20%;
   opacity: 0.5;
 }
-:host { display: block; }   
+:host { display: block; } 
+
+.output-html{
+    max-height: 500px;
+    overflow: scroll;
+    border: solid;
+    padding: 10px;
+    margin: 10px 0px;
+}
+.drop-down {
+  display: none;
+}
+.my-account{
+position: relative;
+
+&:hover .drop-down {
+  min-width: 130px;
+  display: block;
+  position: absolute;
+  top: 35px;
+  border: thin solid #ccc;
+  z-index: 123;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  ul{
+    background-color: #fff;
+    li{
+      width: 100%;
+      border-bottom: thin solid #ccc;
+      padding: 5px 0px;
+    }
+  }
+}
+}
+.main-footer{
+  position: relative;
+  background-color: #042430;
+  color: #fff;
+  padding-top: 50px;
+  min-height: 250px;
+  ul li {
+      border: 2px solid #fff;
+      border-radius: 100%;
+      font-size: 25px;
+      padding: 10px 20px;
+      margin: 5px;
+      a{
+        color: #fff;
+      }
+      &.twt{
+        padding: 10px 16px;
+      }
+      &.gplus{
+        padding: 10px 12px;
+      }
+      &.insta{
+        padding: 10px 18px;
+      }
+    }
+    .all-rights{
+      padding: 20px;
+    }
+}  
+
+.popup-main{
+  overflow: scroll;
+  position: fixed;
+  background: #000;
+  height: 100%;
+  width: 100%;
+  top: 0px;
+  left: 0px;
+  z-index: 1234;
+  pointer-events: visiblefill;
+  touch-action: none;
+}
+.popup-inner{
+  .close-btn{
+    position: relative;
+    h1{
+      position: absolute;
+      right: -5%;
+      top: -40px;
+
+    }
+  }
+  background-color: #fff;
+  width: 40%;
+  margin: 5% auto;
+  position: relative;
+  padding: 1%;
+  .form-group{
+    padding: 20px 10px;
+  }
+  textarea{
+    width: 90%;
+    height: 100px;
+    margin: 0 auto;
+    resize: none;
+  }
+  .btn{ margin-top: 10px;}
+}
 </style>

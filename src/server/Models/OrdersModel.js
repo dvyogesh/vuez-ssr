@@ -41,7 +41,46 @@ const OrdersSchema = new Schema({
 	},
 	userId: {
 		type: String
-	}
+	},
+	cancellation:{
+		type: Object,
+	},
+	isRejected:{
+		type: Boolean
+	},
+	rejectedBy:{
+		type: Object
+	},
+	rejectReason:{
+		type: String
+	},
+	isAccepted: {
+		type: Boolean
+	},
+	acceptedBy: {
+		type: Object
+	},
+	acceptNote: {
+		type: String
+	},
+	isOutForDelivery: {
+		type: Boolean
+	},
+	outForDeliveryBy: {
+		type: Object
+	},
+	outForDeliveryNote: {
+		type: String
+	},
+	isDelivered: {
+		type: Boolean
+	},
+	deliveredConformed: {
+		type: Object
+	},
+	deliveredNote: {
+		type: String
+	},
 	
 });
 

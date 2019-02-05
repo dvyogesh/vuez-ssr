@@ -1,28 +1,29 @@
 <template>
-  <div class="offer-page-main">
-    <ul class="list-inline text-center">
+  <div class="article-list">
+    <ul class="list-inline">
       <li 
-        v-for="(offerPage, index) in offerPages" 
-        :key="offerPage._id + index">
-        <router-link :to="`/offers/${offerPage.offerParam}`">
-          <div>
-            <img :src="offerPage.offerImage">
-            <p>{{ offerPage.offerName }}</p>
-            <p>View More</p>
+        v-for="blogPage in blogPages" 
+        :key="blogPage._id">
+        <router-link :to="`/blog/${blogPage.blogParam}`">
+          <div class="artiicle-inner">
+            <img :src="blogPage.blogImage">
+            <p><b>{{ blogPage.blogName }}</b></p>
           </div>
         </router-link>
+      
       </li>
     </ul>
   </div>
 </template>
 <script>
 import {mapGetters,mapActions, mapState } from 'vuex';
+	
 import axios from 'axios'
 export default {
 	data () {
 		return {
-			offerPages: []
-
+			aboutText: 'About Component sd',
+			blogPages:[]
 		}
 	},
 	// created() {
@@ -31,12 +32,12 @@ export default {
 	//   }
 	// },
 	mounted () {
-		axios.get('/api/cms/offer/pages').then(
+		axios.get('/api/cms/blogs').then(
 			response => {
 				//console.log(response.data)
 				this.toggleLoading(false)
 				if (response.data) {
-					this.offerPages = response.data
+					this.blogPages = response.data
 				}
 			},
 			error => {
@@ -44,7 +45,7 @@ export default {
 			}
 		)
 	},
-	methods: {
+	methods:{
 		...mapActions('App',{
 			'toggleLoading': 'toggleLoading'
 		}),
@@ -52,19 +53,13 @@ export default {
 }
 </script>
 
-
 <style lang="scss" scoped>
-	.offer-page-main {
+	.article-list{
 		ul {
 			li{
-				width: 46%;
-			    padding: 5px;
-			    vertical-align: top;
-			    border: thin solid #cccccc5c;
-			    margin: 1%;
-		}
+				max-width: 300px;
+			}
 		}
 	}
     
 </style>
-

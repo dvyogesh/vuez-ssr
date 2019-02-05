@@ -41,6 +41,12 @@ const OmsSchema = new Schema({
 	},
 	userId: {
 		type: String
+	},
+	isRejected:{
+		type: Boolean
+	},
+	rejectedBy:{
+		type: Object
 	}
 	
 });

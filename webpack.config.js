@@ -1,6 +1,6 @@
 var path = require("path");
 var webpack = require("webpack");
-
+var UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 module.exports = {
   entry: "./src/entry-client.js",
   output: {
@@ -47,7 +47,9 @@ module.exports = {
             presets: ['es2015', "stage-2"],
             plugins: [ 'transform-object-rest-spread' ]
         },
-        exclude: /node_modules/
+        exclude: /node_modules/,
+        
+        
       },
       {
         test: /\.(png|jpg|gif|svg)$/,
@@ -101,12 +103,21 @@ if (process.env.NODE_ENV === "production") {
         NODE_ENV: '"production"'
       }
     }),
-    new webpack.optimize.UglifyJsPlugin({
-      sourceMap: true,
-      compress: {
-        warnings: false
-      }
-    }),
+     new UglifyJsPlugin({
+        //test: /\.js($|\?)/i,
+        sourceMap: true,
+        uglifyOptions: {
+          mangle: {
+            keep_fnames: true,
+          },
+          compress: {
+            warnings: false,
+          },
+          output: {
+            beautify: false,
+          },
+        },
+      }),
     new webpack.LoaderOptionsPlugin({
       minimize: true
     })

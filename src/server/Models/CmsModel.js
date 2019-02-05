@@ -2,21 +2,35 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 
-
-
-
 const bannerSchema = Schema({
-	homePage: Object,
-	ordersPage: {
+	homePage:  {
+    	type:Object
+	},
+	myOrdersPage: {
     	type:Object
 	}
 });
 
 const slidesSchema = Schema({
 	homePage: Object,
-	ordersPage: Array,
+	myOrdersPage: Array,
 });
 
+const siteTickerSchema = Schema({
+	promoLink: String,
+	propmoHtml: String,
+});
+
+const BlogsSchema = new Schema({
+	blogName:String,
+	blogHtml: String,
+	blogParam: String,
+	blogImage: String
+});
+// NEED TO PUT THIS MODEL IN CMS MODEL LIKE "SiteTicker" model
+const Blog = mongoose.model('Blogs', BlogsSchema);
+
+const SiteTicker = mongoose.model('SiteTicker', siteTickerSchema);
 // const personSchema = Schema({
 //     firstname: String,
 //     lastname: String,
@@ -30,8 +44,8 @@ const slidesSchema = Schema({
 const Banners  = mongoose.model('Banners', bannerSchema);
 const Slides = mongoose.model('Slides', slidesSchema);
 
+
 const CmsSchema = new Schema({
-	
 	title: {
 		type:String,
 	},
@@ -44,11 +58,10 @@ const CmsSchema = new Schema({
 	mainBanner: {
 		type: Object,
 	},
-	banners: {type:mongoose.Schema.Types.Mixed, ref: 'Banners'},
-	slides: {type:mongoose.Schema.Types.Mixed, ref: 'Slides'}
+	homeBanner: { type: Object},
+	homeSlides: { type: Array}
 	
 });
-
 
 module.exports = mongoose.model('Cms', CmsSchema);
 //export default {cms, OfferSchema

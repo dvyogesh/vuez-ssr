@@ -1,0 +1,29 @@
+<html>
+    <head>
+        <title>Merchant Check Out Page</title>
+    </head>
+    <body>
+        <center><h1>Please do not refresh this page...</h1></center>
+        <form method="post" action="https://securegw-stage.paytm.in/theia/processTransaction?ORDER_ID=order1" name="f1">
+            <table border="1">
+                <tbody>
+                    <input type="hidden" name="MID" value="rxazcv89315285244163">
+                    <input type="hidden" name="WEBSITE" value="WEBSTAGING">
+                    <input type="hidden" name="ORDER_ID" value="order1">
+                    <input type="hidden" name="CUST_ID" value="cust123">
+                    <input type="hidden" name="MOBILE_NO" value="7777777777">
+                    <input type="hidden" name="EMAIL" value="username@emailprovider.com">
+                    <input type="hidden" name="INDUSTRY_TYPE_ID" value="Retail">
+                    <input type="hidden" name="CHANNEL_ID" value="WEB">
+                    <input type="hidden" name="TXN_AMOUNT" value="100.12">
+                    <input type="hidden" name="CALLBACK_URL" value="//localhost:3000/myorders">
+                    <input type="hidden" name="CHECKSUMHASH" value="ZWdMJOr1yGiFh1nns2U8sDC9VzgUDHVnQpG
+                    pVnHyrrPb6bthwro1Z8AREUKdUR/K46x3XvFs6Xv7EnoSOLZT29qbZJKXXvyEuEWQIJGkw=">
+                </tbody>
+            </table>
+        <script type="text/javascript">
+            document.f1.submit();
+        </script>
+        </form>
+    </body>
+</html>

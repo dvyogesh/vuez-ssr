@@ -3,13 +3,13 @@
     <p 
       class="color-red pointer" 
       @click="reset"><b>{{ aboutText }}</b></p>
-    <h2 class="headding">Offer Page</h2>
+    <h2 class="headding">Blog Page</h2>
     <div class="row">
       <div class="col-sm-12">
         <div class="form-group">
-          <label>Enter Offer Name</label>
+          <label>Enter Blog Name</label>
           <input 
-            v-model="offerName" 
+            v-model="blogName" 
             type="text" 
             class="form-control" 
             placeholder="Enter Offer Name">
@@ -17,9 +17,9 @@
       </div>
       <div class="col-sm-12">
         <div class="form-group">
-          <label>Enter Offer Image Url</label>
+          <label>Enter Blog Image Url</label>
           <input 
-            v-model="offerImage" 
+            v-model="blogImage" 
             type="text" 
             class="form-control" 
             placeholder="Enter Offer Image Url">
@@ -27,33 +27,33 @@
       </div>
       <div class="col-sm-12">
         <div class="form-group">
-          <label>Enter Offer HTML Input</label>
+          <label>Enter Blog HTML Input</label>
           <textarea 
-            v-model="offerPageInput"
+            v-model="blogPageInput"
             class="offer-text-area form-control"
             placeholder="Enter Offer HTML Input, if you do not know HTML use this text editor to convert text to HTML https://html-online.com/editor/" />
           <div class="output-html">
-            <div v-html="offerPageInput"/>
+            <div v-html="blogPageInput"/>
           </div>
 
           <button 
-            v-if="offerPageInput && isEditingId === false"
+            v-if="blogPageInput && isEditingId === false"
             class="btn btn-primary"
             @click="createPage">Submit</button>
           <button 
             v-if="isEditingId"
             class="btn btn-primary"
-            @click="updateOffer(isEditingId)">Update</button>
+            @click="updateBlog(isEditingId)">Update</button>
             
         </div>
       </div>
     </div>
     <div class="offers-accordions">
-      <h3>Existing Offers</h3>
+      <h3>Existing Blogs</h3>
       <div class="accordion">
         <form>
           <div 
-            v-for="(offerPage, index) in offerPages" 
+            v-for="(offerPage, index) in blogPages" 
             :key="offerPage._id" 
             class="option">
             <input 
@@ -64,17 +64,17 @@
               <label 
               :for="`toggle${index}`" 
               class="title">
-              {{ offerPage.offerName }}
+              {{ offerPage.blogName }}
               <span 
                 class="text-right" 
-                @click="editOffer(index, offerPage._id)"><a href="#">Edit</a></span>
+                @click="editBlog(index, offerPage._id)"><a href="#">Edit</a></span>
               <span 
                 class="text-right delete" 
-                @click="deleteOffer(index, offerPage._id)">Delete</span>
+                @click="deleteBlog(index, offerPage._id)">Delete</span>
             </label>
             <div class="content">
               <div class="output-html">
-                <div v-html="offerPage.offerHtml"/>
+                <div v-html="offerPage.blogHtml"/>
               </div>
             </div>
           </div>
@@ -93,10 +93,10 @@ export default {
 	data () {
 		return {
 			aboutText: '',
-			offerPages:[],
-			offerPageInput: '',
-			offerImage: '',
-			offerName: '',
+			blogPages:[],
+			blogPageInput: '',
+			blogImage: '',
+			blogName: '',
 			isEditingId: false
 		}
 	},
@@ -106,12 +106,12 @@ export default {
 	//   }
 	// },
 	mounted () {
-		axios.get('/api/cms/offer/pages').then(
+		axios.get('/api/cms/blogs').then(
 			response => {
 				console.log(response.data)
 				this.toggleLoading(false)
 				if (response.data) {
-					this.offerPages = response.data
+					this.blogPages = response.data
 				}
 			},
 			error => {
@@ -128,20 +128,20 @@ export default {
 		}),
 		createPage(){
 			const inputToStore = {
-				offerName: this.offerName,
-				offerHtml: this.offerPageInput,
-				offerImage: this.offerImage
+				blogName: this.blogName,
+				blogHtml: this.blogPageInput,
+				blogImage: this.blogImage
 			}
 			axios
-				.post('/api/cms/offer/createPage', inputToStore)
+				.post('/api/cms/blogs', inputToStore)
 				.then(response => {
 					console.log(response)
 					this.toggleLoading(false)
-					this.toggleToast('Offer Page Created')
-					this.offerPages.push(
+					this.toggleToast('Blog Page Created')
+					this.blogPages.push(
 						{
-							offerName: this.offerName,
-							offerPageInput: this.offerPageInput, 
+							blogName: this.blogName,
+							blogPageInput: this.blogPageInput, 
 							_id:response.data._id
 						})
 					this.reset()
@@ -151,43 +151,44 @@ export default {
 					this.toggleToast('Somthing went wrong please try again.')
 				})
 		},
-		editOffer(index){
-			const editData = this.offerPages[index]
-			this.offerPageInput = editData.offerHtml
-			this.offerImage = editData.offerImage
-			this.offerName = editData.offerName
+		editBlog(index){
+			const editData = this.blogPages[index]
+			console.log(editData)
+			this.blogPageInput = editData.blogHtml
+			this.blogImage = editData.blogImage
+			this.blogName = editData.blogName
 			this.isEditingId = editData._id
 			this.aboutText = 'Edit here below.......or click here to create new'
-			console.log(this.offerPageInput)
+			console.log(this.blogPageInput)
 			
 		},
-		updateOffer(pageId) {
+		updateBlog(pageId) {
 			const inputToUpdate = {
-				offerName: this.offerName,
-				offerHtml: this.offerPageInput,
-				offerImage: this.offerImage
+				blogName: this.blogName,
+				blogHtml: this.blogPageInput,
+				blogImage: this.blogImage
 			}
 			axios
-				.put(`/api/cms/offer/${pageId}`, inputToUpdate)
+				.put(`/api/cms/blogs/${pageId}`, inputToUpdate)
 				.then(response => {
 					console.log(response)
 					this.toggleLoading(false)
 					this.reset()
-					this.toggleToast('Offer Page Updated')
+					this.toggleToast('Blog Page Updated')
 				})
 				.catch(error => {
 					console.log(error)
 					this.toggleToast('Somthing went wrong please try again.')
 				})    
 		},
-		deleteOffer(index, pageId) {
+		deleteBlog(index, pageId) {
 			
 			axios
-				.delete(`/api/cms/offer/${pageId}`)
+				.delete(`/api/cms/blogs/${pageId}`)
 				.then(response => {
 					this.toggleLoading(false)
-					this.toggleToast('Offer Page Deleted')
-					this.offerPages = remove(this.offerPages, function(n) {
+					this.toggleToast('Blog Page Deleted')
+					this.blogPages = remove(this.blogPages, function(n) {
 						return n._id !== pageId;
 					});
 				})
@@ -197,14 +198,16 @@ export default {
 				})  
 		},
 		reset() {
-			this.offerName =""
-			this.offerPageInput =""
-			this.offerImage = ""
-			this.aboutText = ""
+			this.blogName =""
+			this.blogPageInput = ""
+			this.blogImage = ""
+      		this.aboutText = ""
+      		this.blogHtml = ""
+      		this.isEditingId = false
 		}
 	}
 }
 </script>
 <style lang="scss" scoped>
-@import 'Offers.scss'
+@import '../Offers/Offers.scss'
 </style>

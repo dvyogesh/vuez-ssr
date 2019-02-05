@@ -2,12 +2,12 @@
   <div class="offer-page-main">
     <ul class="list-inline text-center">
       <li 
-        v-for="(offerPage, index) in offerPages" 
-        :key="offerPage._id + index">
-        <router-link :to="`/offers/${offerPage.offerParam}`">
+        v-for="(blogPage, index) in blogPages" 
+        :key="blogPage._id + index">
+        <router-link :to="`/blog/${blogPage.blogParam}`">
           <div>
-            <img :src="offerPage.offerImage">
-            <p>{{ offerPage.offerName }}</p>
+            <img :src="blogPage.blogImage">
+            <p>{{ blogPage.blogName }}</p>
             <p>View More</p>
           </div>
         </router-link>
@@ -21,7 +21,7 @@ import axios from 'axios'
 export default {
 	data () {
 		return {
-			offerPages: []
+			blogPages: []
 
 		}
 	},
@@ -31,12 +31,12 @@ export default {
 	//   }
 	// },
 	mounted () {
-		axios.get('/api/cms/offer/pages').then(
+		axios.get('/api/cms/blogs').then(
 			response => {
 				//console.log(response.data)
 				this.toggleLoading(false)
 				if (response.data) {
-					this.offerPages = response.data
+					this.blogPages = response.data
 				}
 			},
 			error => {

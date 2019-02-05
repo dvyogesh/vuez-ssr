@@ -1,5 +1,5 @@
 <template>
-  <div class="container text-center ">
+  <div class="container text-center cms-container">
     <div class="hide">
       <h1>Students ({{ studentCount }})</h1>
       <ul>
@@ -29,7 +29,10 @@
           <div class="col-sm-2 left-bar-main">
             <div class="fixed-list">
               <div class="user-section">
-                <h3><span class="glyphicon glyphicon-user user-icon"/> Hi Cms User</h3>
+                <h4 class="margin-0">
+                  <span class="glyphicon glyphicon-user user-icon"/>
+                  Hi Cms User
+                </h4>
               </div>
               <ul class="list-unstyled text-left">
                 <li 
@@ -56,22 +59,30 @@
               <li v-show="tabs[1].isActive">
                 <div>
                   <h1>{{ tabs[1].name }}</h1>
-                  
+                  <CmsMyOrders />
                 </div>
           	  
               </li>
               <li v-show="tabs[2].isActive">
                 <div>
                   <h1>{{ tabs[2].name }}</h1>
+                  <SiteTicker />
                 </div>
           	  
               </li>
+             
               <li v-show="tabs[3].isActive">
                 <div>
                   <!--  <h1>{{ tabs[3].name }}</h1> -->
                   <Offers />
                 </div>
-              
+              </li>
+              <li v-show="tabs[4].isActive">
+                <div>
+                  <h1>{{ tabs[4].name }}</h1>
+                  <Blog />
+                </div>
+          	  
               </li>
           	  
             </ul>
@@ -89,7 +100,10 @@
 //import data from './Students.js'
 import Team from './Team';
 import CmsHome from './CmsHome/CmsHome';
-import Offers from './PageCreation/Offers/Offers'
+import Offers from './PageCreation/Offers/Offers';
+import SiteTicker from './SiteTicker/SiteTicker';
+import Blog from './PageCreation/Blog/Blog';
+import CmsMyOrders from './CmsMyOrders/CmsMyOrders';
 
 //import store from '../../store';
 import {mapGetters,mapActions, mapState } from 'vuex';
@@ -102,7 +116,11 @@ export default {
 	components: {
 		Team,
 		CmsHome,
-		Offers
+		Offers,
+		SiteTicker,
+		Blog,
+		CmsMyOrders
+
 	},
 	data() {
 		return {
@@ -120,7 +138,11 @@ export default {
 					isActive: false
 				},
 				{
-					name:'Create Page',
+					name:'Offers Pages',
+					isActive: false
+				},
+				{
+					name:'Blog',
 					isActive: false
 				},
 
@@ -178,50 +200,6 @@ export default {
 
 </script>
 
-<style lang="scss" scoped>
-.container{width: 100%}
-.left-bar-main {
-	padding: 0px;
-}
-.fixed-list {
-		color: #fff;
-		position: fixed;
-		width: 100%;
-		max-width: 235px;
-		height: 100%;
-		background-color: #000;
-		top: 0;
-		padding: 20px 0px;
-		font-size: 20px;
-		.user-section {
-			padding-bottom: 20px;
-			border-bottom: double;
-			border-color: #fff;
-		}
-		.user-icon {
-			border: thin solid #fff;
-			border-radius: 100%;
-			padding: 20px;
-		}
-	ul {
-		padding: 0px;
-		li {
-			padding: 10px;
-			border-bottom: thin solid #fff;
-			cursor: pointer;
-		}
-	}
-}
-	button {
-		font-size: 13px;
-		padding: 3px;
-		border-radius: 5px;
-		border:1px solid #000;
-	}
-
-button:disabled,
-button[disabled] {
-	color:#eee;
- border:1px solid #eee;
-}
+<style lang="scss" >
+@import 'Cms.scss'
 </style>

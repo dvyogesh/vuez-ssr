@@ -1,8 +1,10 @@
 const express = require('express');
 const Joi = require('joi');
+import isEmpty from 'lodash/isEmpty';
 
 const mongoose = require('mongoose');
-const Orders = mongoose.model('Orders');
+const orderDb = mongoose.model('Orders');
+//const Orders = mongoose.model('Orders');
 
 //import  {isLoggedIn} from '../Auth/middlewares';
 
@@ -14,11 +16,13 @@ const schema = Joi.object().keys({
 
 const router = express.Router();
 
-router.get('/', (req, res) => {
+router.get('/orders/:id', (req, res) => {
+	const paramId = req.params.id
 	//console.log(req)
 	// console.log('isLoggedIn(req, res)')
 	// console.log(req.user._id)
-	Orders.find({}).limit(20).exec(function(err, notes){
+	console.log(paramId)
+	orderDb.find({status: paramId}).sort({_id:-1}).limit(200).exec(function(err, notes){
 		if (err) {
 			console.log(err)
 		} else {
@@ -29,7 +33,7 @@ router.get('/', (req, res) => {
 	})
 });
 
-router.post('/', (req, res, next) => {
+router.post('/orders', (req, res, next) => {
 	const result = Joi.validate(req.body, schema);
 
 	if (result.error === null) {
@@ -38,7 +42,7 @@ router.post('/', (req, res, next) => {
 			userId: req.user._id
 		}
 
-		let newNotes = new Orders(dataToStore);
+		let newNotes = new orderDb(dataToStore);
 		newNotes.save(function(err, notes){
 			if(err){
 				res.send(err);
@@ -48,24 +52,70 @@ router.post('/', (req, res, next) => {
 		})
 
 	}
-
-
-	// if (result.error === null) {
-	// 	const note = {
-	// 		...req.body,
-	// 		user_id: req.user._id
-	// 	};
-
-	// 	Notes
-	// 		.insert(note)
-	// 		.then(note => {
-	// 			res.json(note);
-	// 		});
-	// } else {
-	// 	const error = new Error(result.error);
-	// 	res.status(422);
-	// 	next(error);
-	// }
 });
+router.put('/orders/:id', (req, res, next) => {
+	console.log('req.user////')
+	console.log(isEmpty(req.user))
+	const reqbody = req.body;
+	const paramId = req.params.id
+	// if (!isEmpty(req.user)) {
+	// 	console.log('req.user')
+	const {userName, mobileNumber, _id} = req.user.userName
+	// console.log(userName)
+	// console.log(_id)
+	// const dataToStore = {
+			
+	// }
+	if (req.user && reqbody.note ) {
+
+		let dataToStore
+		if (reqbody.isAccepting) {
+			console.log('isAccepting')
+			console.log(reqbody)
+			 dataToStore = {
+				status:'Accepted',
+				isAccepted:true, 
+				acceptedBy:{userName:userName, mobileNumber:mobileNumber,_id: _id,date: new Date()},
+				acceptNote: reqbody.note
+			} 
+		}else if(reqbody.isRejected){
+			console.log('rej')
+			console.log(reqbody)
+			 dataToStore = {
+				status:'Rejected',
+				isRejected:true, 
+				rejectedBy:{userName:userName, mobileNumber:mobileNumber,_id: _id,date: new Date()},
+				rejectReason: reqbody.note
+			} 
+		} else if(reqbody.isOutForDelivery){
+			 dataToStore = {
+				status:'OutForDelivery',
+				isOutForDelivery:true, 
+				outForDeliveryBy:{userName:userName, mobileNumber:mobileNumber,_id: _id,date: new Date()},
+				outForDeliveryNote: reqbody.note
+			}
+		} else if (reqbody.isDelivered) {
+			 dataToStore = {
+				status:'Delivered',
+				isDelivered:true, 
+				deliveredConformed:{userName:userName, mobileNumber:mobileNumber,_id: _id,date: new Date()},
+				deliveredNote: reqbody.note
+			}
+		}
+		 
+		orderDb.updateOne({_id: paramId },{$set:dataToStore},
+			//{$set:dataToStore},
+			 function(err, order){
+			 	console.log('update2')
+		    if (err) {
+		        console.log("Something wrong when updating data!");
+		        res.send(err);
+		    } else {res.send(order);}
+			});
+	} else {
+		res.send({err: 'you are not eligible to edit'})
+	}
+	
+})
 
 module.exports = router;

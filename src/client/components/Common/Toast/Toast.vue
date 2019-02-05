@@ -78,6 +78,7 @@ export default {
 		    padding: 15px;
 		    color: #fff;
 		    border: 5px solid #f19403;
+		    z-index: 12345;
 		}
 		.zoomInDown {
 			  -webkit-animation-name: zoomInDown;

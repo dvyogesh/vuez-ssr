@@ -9,6 +9,8 @@ import Notes from '../components/Notes/Notes.vue'
 import Cms from '../components/Cms/Cms.vue'
 import Offers from '../components/Offers/Offers.vue'
 import OfferDetails from '../components/Offers/OfferDetails.vue'
+import Blogs from '../components/Blog/Blog.vue'
+import BlogDetails from '../components/Blog/BlogDetails.vue'
 
 export const routes = [
 	{ path: '/', component: Home },
@@ -20,7 +22,9 @@ export const routes = [
 	{ path: '/oms', component: Oms },
 	{ path: '/cms', component: Cms },
 	{ path: '/offers', component: Offers },
-	{ path: '/offers/offer/:id', component: OfferDetails },
+	{ path: '/offers/:id', component: OfferDetails },
+	{ path: '/blog', component: Blogs },
+	{ path: '/blog/:id', component: BlogDetails },
 	{ path: '/*', component: FallBackPage }
 ]
 

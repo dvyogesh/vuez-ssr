@@ -1,9 +1,10 @@
-.margin-0{
-	margin: 0px;
-}
 .home-banner-container {
 	background-size: cover;
 	background-repeat: no-repeat;
+  background-color: #6fafff;
+  .who-how-wap{
+    padding-top: 20px;
+  }
 }
 .curosel-left {
   padding-left: 6%;
@@ -13,4 +14,18 @@
       padding-left: 0%;
     }
   }
+ }
+.helth-articles {
+	background-color: #eef2f7;
+	.articl-section {
+	  max-width: 80%;
+	  margin:0 auto;
+	}
 }
+.section-pad-mar {
+	padding: 20px 0px 40px;
+    margin: 10px 0px;
+     h3{ margin-bottom: 30px;}
+}
+
+

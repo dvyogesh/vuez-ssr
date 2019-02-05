@@ -25,7 +25,7 @@ const storage = cloudinaryStorage({
 	cloudinary: cloudinary,
 	folder: "demo",
 	transformation: [{ width: 500, height: 500, crop: "limit" }],
-	quality: 50
+	quality: 80
 });
 const parser = multer({ storage: storage });
 
@@ -36,9 +36,9 @@ router.post("/orderNow", parser.single("file"), function(req, res, next) {
 	console.log('/////****req')
 	const reqBody = req.body;
 	//console.log(req.file) 
-	console.log(reqBody) // to see what is returned to you
+	console.log(req.file) // to see what is returned to you
 	const image = {};
-	image.url = req.file.url;
+	image.url = req.file.secure_url;
 	image.id = req.file.public_id;
 
 	
@@ -184,7 +184,7 @@ router.post("/orderNow", parser.single("file"), function(req, res, next) {
 			  	userName: req.body.userName,
 			  	mobileNumber:req.body.mobileNumber,
 			  	fullAddress:req.body.fullAddress,
-			  	imageUrl: req.file.url,
+			  	imageUrl: req.file.secure_url,
 			  	userId: req.user._id
 		}
 		let newOrder = new orderDb(dataToStore);
@@ -214,7 +214,7 @@ router.get("/", function(req, res) {
 	console.log('get--ord')
 	//console.log(req.user)
 	console.log(req.user._id)
-	orderDb.find({userId: req.user._id}, function(err, orders){
+	orderDb.find({userId: req.user._id}).sort({_id:-1}).exec( function(err, orders){
 
 	        if(err) {
 	        	res.send(err).status(200);
@@ -295,5 +295,27 @@ router.get("/", function(req, res) {
 //         res.send('ToDo deleted');
 //     });
 // });
+router.put('/:id', (req, res, next) => {
+	const reqbody = req.body;
+	console.log('reqbody')
+	console.log(reqbody)
+	if (!req.user && !reqbody.reason ) return false
+	const dataToStore = {
+		canceledBy: req.user,
+		date: new Date(),
+		reason: reqbody.reason
+	} 
+	console.log(req.params.id)
+	const paramId = req.params.id
+	orderDb.findOneAndUpdate({_id: paramId },{status:"canceled", cancellation: dataToStore}, function(err, page){
+		if (err) {
+			console.log(err)
+		} else {
+			//console.log(Cms)
+			//res.json(notes);
+			res.send(page);
+		}
+	})
 
+})
 module.exports = router;

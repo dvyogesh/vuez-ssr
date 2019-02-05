@@ -13,6 +13,10 @@ const DB2 = require('./src/server/Models/NotesModel');
 const DB3 = require('./src/server/Models/UserModel');
 const DB4 = require('./src/server/Models/CmsModel');
 const DB5 = require('./src/server/Models/OffersModel');
+const DB6 = require('./src/server/Models/TestModel');
+
+
+//const DB6 = require('./src/server/Models/SiteTickerModel');
 
 //import {cms, OfferSchema } from './src/server/Models/CmsModel';
 
@@ -35,7 +39,6 @@ const storeReq = require('./src/client/App')
 
 //mongoose instance connection url connection
 mongoose.Promise = global.Promise;
-1
 //connect directly to mongoose
 
 mongoose.connect('mongodb://localhost/homeolaya').then(
