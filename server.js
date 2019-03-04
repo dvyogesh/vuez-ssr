@@ -20,7 +20,8 @@ const DB6 = require('./src/server/Models/TestModel');
 
 //import {cms, OfferSchema } from './src/server/Models/CmsModel';
 
-import './src/loadConfig';
+//import './src/loadConfig';
+import  { serverConfig, clientConfig } from './src/config';
 const auth = require('./src/server/Controllers/Auth');
 const notes = require('./src/server/Controllers/Notes/Notes');
 const middlewares = require('./src/server/Controllers/Auth/middlewares');
@@ -110,8 +111,9 @@ app.get("*", (req, res, next) => {
       //in the template for interpolation
       const context = {
         title: "Homeolaya",
+        config: global.clientConfig,
         meta: `
-                <meta description="vuejs server side render">
+                <meta description="${ JSON.stringify(clientConfig)}">
             `,
         cool: `<link rel="shortcut icon" href="/public/DS7.png" sizes="16x16" type="image/png">`,
         clientConfig: 'clientConfig'

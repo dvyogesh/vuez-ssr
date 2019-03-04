@@ -7,8 +7,9 @@ function optionalRequire(envPath) {
 }
 
 export function loadConfig(context) {
-  const env = process.env.ENV_NAME || process.env.HOM_ENV || 'dev';
-
+  const env = process.env.NODE_ENV
+  // console.log('env===')
+  // console.log(process.env)
   const baseConfig = optionalRequire('./config').default || {};
   const baseContextConfig = optionalRequire(`./config-${context}`).default || {};
   const envConfig = optionalRequire(`./${env}/config`).default || {};

@@ -1,6 +1,6 @@
 export default {
   TOKEN_SECRET: 'Bearer',
-  API_BREADCRUMBS: '/api/breadcrumbs',
+  API_BREADCRUMBS: '/api/prod/breadcrumbs',
   API_TEMPLATES: '/api/templates',
   API_LEFTNAV: '/api/leftnav',
   API_PRODUCT: '/api/product',

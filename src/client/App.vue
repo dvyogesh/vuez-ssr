@@ -9,7 +9,7 @@
           <div class="nav-left col-sm-3 col-xs-12 text-center">
             <div class="nav-logo">
               <router-link to="/">
-                <img src="https://www.medlife.com/images/medlife_logo3.svg" >
+                <img src="https://www.medlife.com/images/medlife_logo.svg" >
               </router-link>
             </div>
           </div>
@@ -121,7 +121,8 @@
 <script>
 import axios from 'axios'
 import {mapGetters,mapActions, mapState } from 'vuex';
-import Toast from './components/Common/Toast/Toast'
+import Toast from './components/Common/Toast/Toast';
+import devConfig from './clientConfig'
 
 
 export default {
@@ -135,6 +136,7 @@ export default {
 			loginData:[]
 		}
 	},
+	
 	computed:{
 		...mapState('User',{
 			userData: 'userData'
@@ -144,13 +146,15 @@ export default {
 			isToastOpen: 'isToastOpen',
 		}),
 	},
-
-	
+	// created(){
+	// 	console.log('this.$parent')
+	// 	console.log(this)
+	// },
 	mounted() {
 		this.checkAuth();
-
-
-
+		console.log('process.env.NODE_ENV')
+		console.log(devConfig)
+		console.log(process.env.ENV)
 		if (this.$router.currentRoute) {
 			this.location = this.$router.currentRoute.path; 
 		}

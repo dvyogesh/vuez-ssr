@@ -81,6 +81,21 @@ const OrdersSchema = new Schema({
 	deliveredNote: {
 		type: String
 	},
+	totalToPay:{
+		type: Number
+	},
+	isPriceEdit:{
+		type:Boolean
+	},
+	editedPrice:{
+		type:Number
+	},
+	priceEditedBy:{
+		type:Object
+	},
+	priceEditedNote:{
+		type:String
+	},
 	
 });
 

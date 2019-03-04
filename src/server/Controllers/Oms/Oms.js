@@ -76,7 +76,8 @@ router.put('/orders/:id', (req, res, next) => {
 				status:'Accepted',
 				isAccepted:true, 
 				acceptedBy:{userName:userName, mobileNumber:mobileNumber,_id: _id,date: new Date()},
-				acceptNote: reqbody.note
+				acceptNote: reqbody.note,
+				totalToPay: reqbody.totalToPay
 			} 
 		}else if(reqbody.isRejected){
 			console.log('rej')
@@ -101,6 +102,15 @@ router.put('/orders/:id', (req, res, next) => {
 				deliveredConformed:{userName:userName, mobileNumber:mobileNumber,_id: _id,date: new Date()},
 				deliveredNote: reqbody.note
 			}
+		} else if (reqbody.isPriceEdit) {
+			 dataToStore = {
+				isPriceEdit:true, 
+				editedPrice: reqbody.editedPrice,
+				priceEditedBy:{userName:userName, mobileNumber:mobileNumber,_id: _id,date: new Date()},
+				priceEditedNote: reqbody.note
+			}
+			
+
 		}
 		 
 		orderDb.updateOne({_id: paramId },{$set:dataToStore},

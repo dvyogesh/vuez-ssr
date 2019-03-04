@@ -23,9 +23,28 @@
       padding: 0px;
       display: block;
       margin-bottom: 1%;
-      border-radius: 5px;
+      border-radius: 2px;
       .cancel-my-order {
-        color: #2a8ae2;
+          font-weight: bold;
+          color: #212121b8;
+          border-radius: 2px;
+          background: #f9f9f9;
+          border: 1px solid #d7d7d7;
+          padding: 6px 15px;
+          span{
+            position: relative;
+            top: 4px;
+            left: -2px;
+            font-size: 18px;
+            color: #31b0d5;
+          }
+      }
+      .panel-heading{
+        padding: 12px 15px;
+        background-color: #f9f9f9;
+      }
+      .order-id{
+        border-radius: 2px;
       }
       img {
        
@@ -33,6 +52,9 @@
       .row {
         margin:0px;
         padding: 2%;
+        &.order-header{
+          padding: 0px;
+        }
       }
       .order-again {
         button {
@@ -109,6 +131,7 @@
   top: 0;
   background-color: #fff;
   z-index: 1234;
+  padding-top: 10px;
   ul{
         margin: 0px;
     li{

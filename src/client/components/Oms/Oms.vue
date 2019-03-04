@@ -24,7 +24,7 @@
           class="panel panel-default">
           
           <div class="row">
-            <div class="col-sm-3">
+            <div class="col-sm-2">
               <div 
                 class="pointer" 
                 @click="openModel({imageUrl: order.imageUrl})">
@@ -36,31 +36,55 @@
               </div>
              
             </div>
-            <div class="col-sm-6">
+            <div class="col-sm-8 order-status-panel">
               
-              
-              <div 
-                class="row bs-wizard" 
-                style="border-bottom:0;">
-                              
-            
-                <div 
-                  :class="order.status === 'OutForDelivery' || order.status === 'Delivered' ? 'complete': 'disabled' "
-                  class="col-xs-3 bs-wizard-step"
-                >
-                  <!-- complete -->
-                  <div class="text-center bs-wizard-stepnum">Out for Delivery</div>
-                  <div class="progress"><div class="progress-bar"/></div>
-                  <a 
-                    href="#" 
-                    class="bs-wizard-dot"/>
-                  <div class="bs-wizard-info text-center">
-                    Integer semper dolor ac auctor rutrum. bibendum 
-                  </div>
-                </div>
+              <div class="amount">
+                <p v-if="order.totalToPay">Actual amount to pay Rs. <b> {{ order.totalToPay }}</b></p>
+                <p v-if="order.editedPrice">edited price Rs. <b> {{ order.editedPrice }}</b></p>
+                <br>
               </div>
+              
+              <OmsAccordian 
+                v-if="order.isAccepted"
+                :_id="order._id"
+                :note="order.acceptNote"
+                :done-by="order.acceptedBy"
+                label-name="Accepted" />
+              <OmsAccordian 
+                v-if="order.isOutForDelivery"
+                :_id="order._id"
+                :note="order.outForDeliveryNote"
+                :done-by="order.outForDeliveryBy"
+                label-name="Out For Delivery" />
+              <OmsAccordian 
+                v-if="order.isDelivered"
+                :_id="order._id"
+                :note="order.deliveredNote"
+                :done-by="order.deliveredConformed"
+                label-name="Delivered" />
+             
+                <!-- <div 
+                v-if="order.isOutForDelivery"
+              >
+                <input 
+                  :id="`outForDelivery_${order._id}`"
+                  type="radio"
+                  name="name"  
+                  class="hide">
+                <label :for="`outForDelivery_${order._id}`">Out For Delivery 
+                  <span class="glyphicon glyphicon-chevron-down"/>
+                </label>
+                <div class="text-left data-panel">
+                  <p><b>Note:</b>{{ order.outForDeliveryNote }}</p>
+                  <p 
+                    v-for="(key, value) of order.outForDeliveryBy" 
+                    :key="key+1">
+                  <b>{{ value }}: </b> {{ key }}</p>
+                </div>
+              </div> -->
+
             </div>
-            <div class="col-sm-3 order-actions " >
+            <div class="col-sm-2 order-actions " >
               <div v-if="order.isRejected !== true">
                 <button 
                   v-if="order.isAccepted !== true"
@@ -79,6 +103,12 @@
                   class="btn btn-primary "
                   @click="openModel({imageUrl: order.imageUrl, OrderId:order._id, isOutForDelivery: true})">
                   Out for Delivery
+                </button>
+                <button 
+                  v-if="order.isAccepted === true && order.isOutForDelivery !== true && order.totalToPay" 
+                  class="btn btn-info"
+                  @click="openModel({imageUrl: order.imageUrl, OrderId:order._id, isPriceEdit: true, totalToPay:order.editedPrice ? order.editedPrice : order.totalToPay,})">
+                  Edit price
                 </button>
                 <button 
                   v-if="order.isOutForDelivery === true && order.isDelivered !== true " 
@@ -119,8 +149,16 @@
           <img :src="popUpData.imageUrl">
         </div>
         <div 
-          v-if="popUpData.isRejecting || popUpData.isAccepting || popUpData.isOutForDelivery || popUpData.isDelivered" 
+          v-if="popUpData.isRejecting || popUpData.isAccepting || popUpData.isOutForDelivery || popUpData.isDelivered || popUpData.isPriceEdit" 
           class="form-group">
+          <label v-if="popUpData.isAccepting || popUpData.isPriceEdit">
+            Enter Amount
+          </label>
+          <br>
+          <input 
+            v-model="popUpData.totalToPay" 
+            type="text">
+          <br>
           <label for="usr">
             Enter 
             
@@ -128,7 +166,7 @@
             <span v-if="popUpData.isAccepting"> Accepting Note </span>
             <span v-if="popUpData.isOutForDelivery"> Delivery details </span>
             <span v-if="popUpData.isDelivered"> Delivered details </span>
-             
+            <span v-if="popUpData.isPriceEdit">Price Edit reson</span>
             
           </label>
           <textarea
@@ -155,6 +193,10 @@
           class="btn btn-warning" 
           @click="delivered(popUpData.OrderId)">Delivered</button>
         <button 
+          v-if="popUpData.isPriceEdit"
+          class="btn btn-warning" 
+          @click="editPrice(popUpData.OrderId)">Submit Edited Price</button>
+        <button 
           class="btn btn-default" 
           @click="closeModel">Close</button>
 
@@ -166,8 +208,12 @@
 </template>
 <script>
 import {mapGetters,mapActions, mapState } from 'vuex';
+import OmsAccordian from './OmsAccordian/OmsAccordian'
 import axios from 'axios'
 export default {
+	components:{
+		OmsAccordian
+	},
 	data () {
 		return {
 			userName: '',
@@ -293,33 +339,38 @@ export default {
 			)
 		},
 		acceptOrder(orderId){
-			this.toggleLoading(true)
+			
 			axios.defaults.headers.common['authorization'] = `Bearer ${localStorage.getItem('jwtUser')}`
-			const data = {note:this.note, isAccepting: true}
-      
-			axios.put(`/api/oms/orders/${orderId}`, data).then(
-				response => {
-					this.getOrders(findAndReplace(this.orders, orderId));
-					function findAndReplace(order, find) {
-						let i;
-						for(i=0; i < order.length ; i++) {
-							if (order[i]._id === find) {
-								order[i].isAccepted = true
+			const data = {note:this.note, isAccepting: true, totalToPay: this.popUpData.totalToPay}
+			if (this.note && this.popUpData.totalToPay) {
+				this.toggleLoading(true)
+				axios.put(`/api/oms/orders/${orderId}`, data).then(
+					response => {
+						this.getOrders(findAndReplace(this.orders, orderId));
+						function findAndReplace(order, find) {
+							let i;
+							for(i=0; i < order.length ; i++) {
+								if (order[i]._id === find) {
+									order[i].isAccepted = true
+								}
 							}
+							return order
 						}
-						return order
-					}
-					this.closeModel()
+						this.closeModel()
 
-					this.toggleLoading(false)
-					this.toggleToast('Order Accepted Sucessfully')
-          
-				},
-				error => {
-					this.toggleLoading(false)
-					this.toggleToast('Some thing went wrong Please try again')
-				}
-			)
+						this.toggleLoading(false)
+						this.toggleToast('Order Accepted Sucessfully')
+               
+					},
+					error => {
+						this.toggleLoading(false)
+						this.toggleToast('Some thing went wrong Please try again')
+					}
+				)
+			} else {
+				this.toggleToast('Fill all the input feilds')
+			}
+			
 		},
 		outForDelivery(orderId){
 			this.toggleLoading(true)
@@ -379,6 +430,35 @@ export default {
 				}
 			)
 		},
+		editPrice(orderId){
+			this.toggleLoading(true)
+			axios.defaults.headers.common['authorization'] = `Bearer ${localStorage.getItem('jwtUser')}`
+			const data = {note:this.note, isPriceEdit: true, editedPrice: this.popUpData.totalToPay}
+         
+			axios.put(`/api/oms/orders/${orderId}`, data).then(
+				response => {
+					this.getOrders(findAndReplace(this.orders, orderId));
+					function findAndReplace(order, find) {
+						let i;
+						for(i=0; i < order.length ; i++) {
+							if (order[i]._id === find) {
+								order[i].editedPrice = data.editedPrice
+							}
+						}
+						return order
+					}
+					this.closeModel()
+
+					this.toggleLoading(false)
+					this.toggleToast('Order Price Edited Sucessfully')
+             
+				},
+				error => {
+					this.toggleLoading(false)
+					this.toggleToast('Some thing went wrong Please try again')
+				}
+			)
+		},
 		...mapActions('App',{
 			'toggleLoading': 'toggleLoading',
 			'toggleToast': 'toggleToast'
@@ -395,6 +475,11 @@ export default {
     .order-tabs{
       border-bottom: thin solid #ccc;
       margin: 20px 0px;
+      position: sticky;
+      top: 0px;
+      background-color: #fff;
+      z-index: 12;
+      padding-top: 10px;
       ul{margin: 0px}
       li{
         color: #0066c0;
@@ -415,6 +500,26 @@ export default {
         display: block;
         margin: 5px auto;
         min-width: 130px;
+      }
+    }
+    .data-panel{display: none;}
+   input:checked ~ .data-panel {
+    display: block;
+    }
+    .order-status-panel{
+      label{
+        background: #fff;
+        padding: 5px;
+        display: block;
+        color: #7A7572;
+        font-weight: bold;
+        border: 1px solid #424242;
+        position: relative;
+        span{
+          position: absolute;
+          right:10px;
+          top: 8px;
+        }
       }
     }
   }

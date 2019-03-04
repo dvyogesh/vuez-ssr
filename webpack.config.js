@@ -1,6 +1,7 @@
 var path = require("path");
 var webpack = require("webpack");
 var UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+
 module.exports = {
   entry: "./src/entry-client.js",
   output: {
@@ -91,8 +92,15 @@ module.exports = {
     net: 'empty',
     fs: 'empty'
   },
-  devtool: "#eval-source-map"
+  devtool: "#eval-source-map",
+  plugins: [
+    new webpack.DefinePlugin({
+      "process.env.ENV":JSON.stringify(process.env.NODE_ENV) 
+    }),
+   
+  ]
 };
+
 
 if (process.env.NODE_ENV === "production") {
   module.exports.devtool = "#source-map";
@@ -104,7 +112,7 @@ if (process.env.NODE_ENV === "production") {
       }
     }),
      new UglifyJsPlugin({
-        //test: /\.js($|\?)/i,
+        test: /\.js($|\?)/i,
         sourceMap: true,
         uglifyOptions: {
           mangle: {

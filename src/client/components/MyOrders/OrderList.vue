@@ -8,21 +8,25 @@
         :key="order.id" 
         class="panel panel-default">
         <div class="panel-heading text-left">
-          <p>
-            <b>Order Placed at {{ order.placedDate }}
+          <div class="row order-header">
+            <div class="col-sm-9">
+              <span class="btn btn-info order-id">{{ order._id }}</span> 
+              
+            </div>
+            <div class="col-sm-3">
               <span 
-                v-if="order.status !== 'canceled' && order.status !== 'OutForDelivery'"
+                v-if="order.status !== 'canceled' && order.status !== 'OutForDelivery' && order.status !== 'Rejected' && order.status !== 'Delivered'"
                 class="cancel-my-order pull-right pointer" 
                 @click="cancelReasonModel(order._id)">
-                Calcel This Order
+                <span class="glyphicon glyphicon-remove-circle "/> Calcel
               </span>
               <span
-                v-if="order.status === 'canceled' " 
+                v-if="order.status === 'canceled' || order.status === 'Rejected' && order.status !== 'Delivered' " 
                 class="pull-right">
-                Order has canceled
+                Order has {{ order.status === 'Rejected' ? 'Rejected' : 'Canceled' }} 
               </span>
-            </b>
-          </p>
+            </div>
+          </div>
         </div>
         <div class="row">
           <div class="col-sm-3">
@@ -33,9 +37,6 @@
           </div>
           <div class="col-sm-9">
             <div class="pre-pay">
-              isRejected
-              isAccepted
-               
               <div 
                 v-if="order.status === 'Accepted' && order.status !== 'Delivered' "
                 class="well pointer" 
@@ -61,7 +62,7 @@
                   href="#" 
                   class="bs-wizard-dot"/>
                 <div class="bs-wizard-info text-center">
-                  Lorem ipsum dolor sit amet.
+                  <p>Placed On{{ order.placedDate.split(' ').slice(1, 4).toString().replace(/,/g,'-') }}</p>
                 </div>
               </div>
   	                        
@@ -133,7 +134,8 @@
             @click="closeModel">X</h1>
         </div>
         <div class="popup-header">
-          <p v-if="popUpData.amount">{{ popUpData.amount }}
+          <p v-if="popUpData.amount">Total Amount To Pay 
+            <b>Rs. {{ popUpData.amount }} </b>
           </p><p 
             v-else 
             class="color-red"> You can not Pay because your paymet deal not conformed</p>
@@ -185,9 +187,9 @@ const port = 3000;
 const checksum_lib = require('./checksum.js');
 //const app = express();
 var PaytmConfig = {
-	mid: "dssdSt35602503916402",
-	key: "fa38a3YFOeX3Zmaz",
-	website: "WEBSTAGING"
+	mid: "eNmGQD59071875602978",
+	key: "SH5&CnPHf!#2lAuB",
+	website: "DEFAULT"
 }
 export default {
 	props:[
@@ -234,6 +236,7 @@ export default {
 		},
 		payNow() {
 			if (this.walletName){
+				console.log(this.popUpData.amount.toFixed(2))
 				this.toggleLoading(true)
 				this.toggleToast(`Redirecting to ${this.walletName}`)
       
@@ -242,9 +245,9 @@ export default {
 				this.params['WEBSITE']       = PaytmConfig.website;
 				this.params['CHANNEL_ID']      = 'WEB';
 				this.params['INDUSTRY_TYPE_ID']  = 'Retail';
-				this.params['ORDER_ID']      = this.popUpData.OrderId;
+				this.params['ORDER_ID']      = `${this.popUpData.OrderId}_${new Date().getTime()}`;
 				this.params['CUST_ID']       = this.popUpData.userId;
-				this.params['TXN_AMOUNT']      = '200.00';
+				this.params['TXN_AMOUNT']      = this.popUpData.amount.toFixed(2);
 				this.params['CALLBACK_URL']    = 'http://localhost:'+port+'/api/payment/callback';
 				this.params['EMAIL']       = 'yogesh.macet@gmail.com';
 				this.params['MOBILE_NO']     = '9490424270';
@@ -254,7 +257,7 @@ export default {
 				}
 				checksum_lib.genchecksum(this.params, PaytmConfig.key, (err, checksum) => {
 
-					const txn_url = "https://securegw-stage.paytm.in/theia/processTransaction"; // for staging
+					const txn_url = "https://securegw.paytm.in/theia/processTransaction"; // for staging
 					// var txn_url = "https://securegw.paytm.in/theia/processTransaction"; // for production
                     
 				
@@ -267,7 +270,11 @@ export default {
 					document.getElementById('payment').innerHTML = html;
 					switch(this.walletName){
 					case 'PAYTM':
-						if (this.showPay && document.paytmForm) {document.paytmForm.submit();document.getElementById('payment').innerHTML = ''}
+						if (this.showPay && document.paytmForm) {
+							document.paytmForm.submit();
+							document.paytmForm.reset()
+							document.getElementById('payment').innerHTML = ''
+						}
 						break;
 					default: ''
 					}

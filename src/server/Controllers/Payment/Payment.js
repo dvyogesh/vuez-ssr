@@ -167,6 +167,8 @@ router.get('/', (req, res, next) => {
 })
 router.post('/callback', (req, res) => {
 	console.log('cool----')
+	console.log(req.body)
+	const reqBody = req.body
 	//console.log(req)
 	var body = '';
 	        
@@ -251,6 +253,36 @@ router.post('/callback', (req, res) => {
 			post_req.end();
 		});
 	        });
-	        res.send(req.body)
+	       const HTML = `
+	       	<div class="payment-report-main">
+	       		<p>Transaction Amount  <b> ${reqBody.TXNAMOUNT} </b> of </p>
+	        	<p>${reqBody.RESPMSG}</p>
+	        	<p>This page will auto redirect to my orders with in <b><span id="redirect-time"></span></b> if not</p>
+	        	<a href="/myorders">Click here to go Myorders</a>
+	        </div>
+	        <style>
+	        .payment-report-main{ max-width:360px;margin:0 auto;border:thin solid #ccc;padding:10px}
+	        </style>
+	        <script>
+	        //setTimeout(";",4000);
+	          var SessionTime = 12000;
+	        var tickDuration = 1000;
+	        var num = 12;
+	        
+	        var myInterval = setInterval(function() {
+	            num = num-1;
+	            document.getElementById('redirect-time').innerHTML= num + ' seconds'
+	        }, 1000);
+
+	        var myTimeOut = setTimeout(SessionExpireEvent, SessionTime);
+	        function SessionExpireEvent() {
+			    clearInterval(myInterval);
+			    window.location.href='/myorders'
+			}
+	        
+	        </script>`
+	        res.write(HTML);
+	res.end();
+	        //res.send(req.body)
 })
 module.exports = router;

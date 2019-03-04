@@ -4,8 +4,11 @@ import VueRouter from 'vue-router'
 import { routes } from './router/router.js'
 import isEmpty from 'lodash/isEmpty';
 import store from './store';
+import devConfig from './clientConfig'
 Vue.use(VueRouter)
 export function createApp () {
+	//console.log(serverConfig)
+	//const  clientConfig =  require('./clientConfig') ;
 	const router = new VueRouter({
 		mode: 'history',
 		routes
@@ -14,7 +17,8 @@ export function createApp () {
 
 	router.beforeEach((to, from, next) => {
 	  // redirect to login page if not logged in and trying to access a restricted page
-	  
+	  console.log('clientConfig---')
+	   
 	  if(typeof(Storage) !== "undefined") {
 	  	const publicPages = ['/login', '/signup', '/', '/offers', '/blog'];
 	  	const authRequired = !publicPages.includes(to.path);
