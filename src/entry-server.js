@@ -4,8 +4,7 @@ import { createApp } from './client/main.js'
 export default context => {
 	// since there could potentially be asynchronous route hooks or components,
 	// we will be returning a Promise so that the server can wait until
-	console.log('context')
-	console.log(context)
+	
 	// everything is ready before rendering.
 	return new Promise((resolve, reject) => {
 		const { app, router } = createApp()

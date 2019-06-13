@@ -33,10 +33,10 @@ const parser = multer({ storage: storage });
 
 router.post("/orderNow", parser.single("file"), function(req, res, next) {
 	
-	console.log('/////****req')
+	
 	const reqBody = req.body;
 	//console.log(req.file) 
-	console.log(req.file) // to see what is returned to you
+	// to see what is returned to you
 	const image = {};
 	image.url = req.file.secure_url;
 	image.id = req.file.public_id;
@@ -50,12 +50,14 @@ router.post("/orderNow", parser.single("file"), function(req, res, next) {
 
 	//const result = Joi.validate(req.body, schema);
 	if (req.body.userName) {
+
 		usersDb.findOne({
 			userName: req.body.userName
 		}).then(user => {
+
 			// if user is undefined, username is not in the db, otherwise, duplicate user detected
 			if (user) {
-				console.log('user')
+				console.log('---existingUser')
 				console.log(user)
 				function createTokenSendResponse(userDetails) {
 					const payload = {
@@ -110,6 +112,7 @@ router.post("/orderNow", parser.single("file"), function(req, res, next) {
 						
 				// });
 			} else {
+				console.log('---newUser')
 				// hash the password
 				bcrypt.hash(req.body.mobileNumber.trim(), 12).then(hashedPassword => {
 					// insert the user with the hashed password

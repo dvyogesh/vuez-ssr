@@ -1,11 +1,18 @@
 import Vue from 'vue'
-import App from './App.vue'
-import VueRouter from 'vue-router'
-import { routes } from './router/router.js'
+import Vuetify from 'vuetify'
 import isEmpty from 'lodash/isEmpty';
+import VueRouter from 'vue-router'
+import App from './App.vue'
+import { routes } from './router/router.js'
 import store from './store';
 import devConfig from './clientConfig'
+
+import 'vuetify/dist/vuetify.min.css'
+
+
 Vue.use(VueRouter)
+Vue.use(Vuetify)
+
 export function createApp () {
 	//console.log(serverConfig)
 	//const  clientConfig =  require('./clientConfig') ;

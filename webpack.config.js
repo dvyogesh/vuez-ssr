@@ -7,26 +7,35 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, "./dist"),
     publicPath: "/dist/",
-    filename: "build.js"
+    filename: "build.js",
+    libraryTarget: 'commonjs2'//this option allows users to insert comments within the export wrapper. To insert the same comment for each libraryTarget type, set auxiliaryComment to a string:
   },
   module: {
     rules: [
       {
         test: /\.css$/,
-        use: ["vue-style-loader", "css-loader"]
+        use: ["vue-style-loader", "css-loader"],
+        
       },
       {
         test: /\.scss$/,
-        use: ["vue-style-loader", "css-loader", "sass-loader"]
+        use: ["vue-style-loader", "css-loader", "sass-loader"],
+        exclude: /node_modules/,
       },
       {
         test: /\.sass$/,
-        use: ["vue-style-loader", "css-loader", "sass-loader?indentedSyntax"]
+        use: ["vue-style-loader", "css-loader", "sass-loader?indentedSyntax"],
+        exclude: /node_modules/,
+      },
+      {
+          test: /\.styl$/,
+          loader: ['css-loader', 'stylus-loader']
       },
       {
         test: /\.vue$/,
         loader: "vue-loader",
         options: {
+          
           loaders: {
             // Since sass-loader (weirdly) has SCSS as its default parse mode, we map
             // the "scss" and "sass" values for the lang attribute to the right configs here.
@@ -39,17 +48,19 @@ module.exports = {
             ]
           }
           // other vue-loader options go here
-        }
+        },
+        
+        exclude: /node_modules/,
       },
       {
         test: /\.js$/,
         loader: "babel-loader",
         options: {
             presets: ['es2015', "stage-2"],
-            plugins: [ 'transform-object-rest-spread' ]
+            plugins: [ 'transform-object-rest-spread' ],
+
         },
         exclude: /node_modules/,
-        
         
       },
       {
@@ -96,9 +107,11 @@ module.exports = {
   plugins: [
     new webpack.DefinePlugin({
       "process.env.ENV":JSON.stringify(process.env.NODE_ENV) 
-    }),
+    })
    
-  ]
+  ],
+  target: "node",
+
 };
 
 
